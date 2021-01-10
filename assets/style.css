@@ -1,0 +1,12 @@
+body {
+    background-color: lightblue;
+}
+
+.body-container {
+    text-align: center;
+    align-content: center;
+}
+
+.card {
+    background-color: rgb(231, 231, 231);
+}
