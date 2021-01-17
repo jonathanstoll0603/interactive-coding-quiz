@@ -20,6 +20,7 @@ $().ready(function() {
     var questionCount = 0; // counts which question user is on
     var userSelections = []; // array containing user choices
     var score = 0;
+    var quizOver = false;
     var timerButton = $(".seconds-left")
     var quizButton = $(".start-quiz");
     var introduction = $(".introduction");
@@ -81,7 +82,7 @@ $().ready(function() {
         var answerButtons = "";
         for (var i = 0; i < questionsObj.length; i++) {
             answerButtons = $("<button class='btn btn-light mx-4 my-2 py-3 answer' name='answer'></button>");
-            answerButtons.attr("value", [i]);
+            answerButtons.attr("id", questionsObj[index].correctAnswer);
             answerButtons.text(questionsObj[index].choices[i]);
             cardEl.append(answerButtons);
         }
@@ -89,11 +90,16 @@ $().ready(function() {
         var nextQuestionButton = $("<button>Next</button>");
         nextQuestionButton.addClass("next btn btn-light mx-4 my-2");
         cardEl.append(nextQuestionButton);
-        $(".answer").on("click", userChoice);
         index++;
         questionCount++
         return divEl;
     };
+
+    // On clicking next, display the next question
+    // $(".next").on("click", function () {
+        
+    // });
+
 
     $(".next").on("click", function(e) {
         e.preventDefault();
@@ -104,20 +110,17 @@ $().ready(function() {
             showNextQuestion();
         }
     })
-
+    $(".answer").on("click", userChoice);
     function userChoice(e) {
         var index = 0;
-        console.log(questionsObj[index].correctAnswer)
-        e.preventDefault();
-        if ($(".answer").val() == questionsObj[index].correctAnswer) {
-            $(".card-title").text("Correct!")
-            score++;
+        if ($(this).id == questionsObj[0].correctAnswer) {
+            alert("Correct")
         } else {
-            $(".card-title").text("Wrong answer. The correct answer was " + questionsObj[index].correctAnswer);
+            alert("Wrong")
         }
         index++;
+        console.log(index)
     }
-
 
     function showNextQuestion() {
         $("#question").remove();
