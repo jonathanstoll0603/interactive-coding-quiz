@@ -87,6 +87,8 @@ $().ready(function() {
             cardEl.append(answerButtons);
         }
 
+        $(".answer").on("click", userChoice);
+
         var nextQuestionButton = $("<button>Next</button>");
         nextQuestionButton.addClass("next btn btn-light mx-4 my-2");
         cardEl.append(nextQuestionButton);
@@ -110,8 +112,9 @@ $().ready(function() {
             showNextQuestion();
         }
     })
-    $(".answer").on("click", userChoice);
+
     function userChoice(e) {
+        e.preventDefault();
         var index = 0;
         if ($(this).id == questionsObj[0].correctAnswer) {
             alert("Correct")
@@ -119,7 +122,6 @@ $().ready(function() {
             alert("Wrong")
         }
         index++;
-        console.log(index)
     }
 
     function showNextQuestion() {
