@@ -1,92 +1,30 @@
-$(function() {
-  
-    // Global Variables
+$().ready(function() {
+    var questionsObj = [{
+      question: "What is question 1?",
+      choices: ["a1", "b1", "c1", "d1"],
+      correctAnswer: "a1"
+    }, {
+      question: "What is question 2?",
+      choices: ["a2", "b2", "c2", "d2"],
+      correctAnswer: "b2"
+    }, {
+      question: "What is question 3?",
+      choices: ["a3", "b3", "c3", "d3"],
+      correctAnswer: "c3"
+    }, {
+      question: "What is question 4?",
+      choices: ["a4", "b4", "c4", "d4"],
+      correctAnswer: "d4"
+    }];
+
+    var questionCount = 0; // counts which question user is on
+    var userSelections = []; // array containing user choices
     var score = 0;
-    var user = "";
-    var highscore = "";
-    var timesUp = false;
-
-    // Query selectors for the main page divs, timer, and buttons.
+    var timerButton = $(".seconds-left")
+    var quizButton = $(".start-quiz");
+    var introduction = $(".introduction");
     var highscoresButton = $(".highscores");
-    var startQuizButton = $(".start-quiz");
-    var timerButton = $(".seconds-left");
-
-    // Selectors for HTML classes
-    var cardBody = $(".card-body");
-    var cardTitle = $(".card-title");
-    var cardText = $(".card-text");
-    var button = $(".start-quiz");
-
-    // Variables that hold created elements
-    var cardTitleReplacementOneEl = $("<h5 class='card-title'>Question 1:</h5>");
-    var cardTitleReplacementTwoEl = $("<h5 class='card-title'>Question 2:</h5>");
-    var cardTitleReplacementThreeEl = $("<h5 class='card-title'>Question 3:</h5>");
-    var cardTitleReplacementFourEl = $("<h5 class='card-title'>Question 4:</h5>");
-    var cardTextReplacementOneEl = $("<p class='card-text'>What is the answer to question 1?</p>");
-    var cardTextReplacementTwoEl = $("<p class='card-text'>What is the answer to question 2?</p>");
-    var cardTextReplacementThreeEl = $("<p class='card-text'>What is the answer to question 3?</p>");
-    var cardTextReplacementFourEl = $("<p class='card-text'>What is the answer to question 4?</p>");
-    var buttonOneEl = $("<button type='button' class='answer-button btn btn-light' style='display:block; width: 100%'>Answer</button>");
-    var buttonTwoEl = $("<button type='button' class='answer-button btn btn-light' style='display:block; width: 100%'>Answer 2</button>");
-    var buttonThreeEl = $("<button type='button' class='answer-button btn btn-light' style='display:block; width: 100%'>Answer 3</button>");
-    var buttonFourEl = $("<button type='button' class='answer-button btn btn-light' style='display:block; width: 100%'>Answer 4</button>");
-
-    // Array containing each question to be asked
-    var titlesArray = 
-    [ 
-        "Question 1:",
-        "Question 2:",
-        "Question 3:",
-        "Question 4:"
-    ]
-
-    var questionsArray =
-    [
-        "What is question 1?",
-        "What is question 2?",
-        "What is question 3?",
-        "What is question 4?"
-    ]
-       
-   // Array containing an array of the answers to the question
-   var answersArray = [
-       
-       [
-           "CorrectQ1",
-           "CorrectQ2",
-           "CorrectQ3",
-           "CorrectQ4"
-       ],
-       
-       [
-           "WrongQ1",
-           "WrongQ2",
-           "WrongQ3",
-           "WrongQ4"
-       ],
-
-       [
-           "WrongQ1",
-           "WrongQ2",
-           "WrongQ3",
-           "WrongQ4"
-       ],
-
-       [
-           "WrongQ1",
-           "WrongQ2",
-           "WrongQ3",
-           "WrongQ4",
-       ]
-   ]        
-   // Assigning a value of "correct" to each right answer in order to select for the value later.
-   $(answersArray[0][0]).attr("data-value", "correct");
-   $(answersArray[0][1]).attr("data-value", "correct");
-   $(answersArray[0][2]).attr("data-value", "correct");
-   $(answersArray[0][3]).attr("data-value", "correct");
-
-    // Array of the answer buttons to be called on in the answerTextFill function
-    var buttonArray = [buttonOneEl, buttonTwoEl, buttonThreeEl, buttonFourEl];
+    var quiz = $("#quiz");
 
     // // Event listener for highscores button
     highscoresButton.on("click", seeHighscores);
@@ -94,94 +32,114 @@ $(function() {
     function seeHighscores() {
         location.href = "highscores.html";
     }
- 
-    // // The init function is called when the page loads
-    // // function init() {
-    // //     getHighscore();
-    // //     getUser();
-    // // }
 
-    $(".start-quiz").on("click", startQuiz);
-    
-    function startQuiz() {    
-    QandA();
-    countdown();
-    }
-
-    function QandA() {
-        cardTitle.hide();
-        cardTitle.replaceWith(cardTitleReplacementOneEl);
-        cardText.replaceWith(cardTextReplacementOneEl);
-        button.replaceWith(buttonOneEl, buttonTwoEl, buttonThreeEl, buttonFourEl);
-        answerTextFill();  
-        $(".answer-button").on("click", answerCheck);
-    }
-
-    function secondQandA() {
-        cardTitleReplacementOneEl.replaceWith(cardTitleReplacementTwoEl);
-        cardTextReplacementOneEl.replaceWith(cardTextReplacementTwoEl);
-        button.replaceWith(buttonOneEl, buttonTwoEl, buttonThreeEl, buttonFourEl);
-        answerTextFill();
-        $(".answer-button").on("click", answerCheck);
-    }
-
-        function answerTextFill() {
-            for (var j = 0; j < answersArray.length; j++) {
-                var buttonSelector = buttonArray[j];
-                $(answersArray[0][j]).attr("value", "correct");
-                buttonSelector.text(answersArray[j][j]);
-            }        
-        }
-console.log($(answersArray[0][0]).val())
-       
-    var responseText = $("<p class='card-text'></p>");
-    var nextButton = $("<button type='button' class='answer-button btn btn-light' style='display:block; width: 100%'>Answer</button>");
-    // Click handler to parse if correct answer was clicked
-    function answerCheck(index) {
-        var answerValue = $(this).data("value");
-        index = 0
-
-        if (answerValue) {
-            score++;
-            console.log(score)
-            $(this).css("background-color", "green");
-            responseText.text("Correct!")
-            cardBody.append(responseText);
-            cardBody.append(nextButton);
-
-        } else {
-            $(this).css("background-color", "red");
-            responseText.text("Incorrect. The correct answer was: " + answersArray[0][index] + ".")
-            cardBody.append(responseText);
-            cardBody.append(nextButton);
-        }
-        index++;
-        // Event handler/function that shows next question
-        $(".next-button").on("click", nextQuestion)
-        function nextQuestion() {
-            nextButton.hide();
-            responseText.hide();
-            secondQandA();
-        }
-    }  
-
-
+    // On start quiz button click, do the following function
+    $(".start-quiz").on("click", function() {
+        introduction.hide(); //Hide the introduction container and contents
+        createQandAElement(); // Create the question and answers
+        showNextQuestion(); // Display the question
+        countdown(); // Start the countdown timer
+    })
 
     // Countdown function that starts at 60 seconds and counts down to 0
     function countdown() {
         var timeLeft = 60;
-        
+                
         var timer = setInterval(function() {
             timeLeft--;
             var timeDisplay = $(timerButton).text(timeLeft);
-            
-        if (timeLeft > 0) {
-            return timeDisplay;
-        } else {
-            clearInterval(timer);
-            timesUp = true;
-            return $(timeDisplay).text("Time's Up!")
-        }
+                   
+            if (timeLeft > 0) {
+                return timeDisplay;
+            } else {
+                clearInterval(timer);
+                timesUp = true;
+                return $(timeDisplay).text("Time's Up!")
+            }
         }, 1000);
     }
+
+    function createQandAElement() {
+        var index = 0;
+
+        var divEl = $("<div>", {id: 'question'});
+        divEl.addClass("container-md mx-4 my-4 question-container")
+        $("#quiz").append(divEl);
+
+        var cardEl = $("<div>").addClass("card py-4");
+        divEl.append(cardEl);
+
+        var h5El = $("<h5>Question " + (index + 1) + ":</h5>");
+        h5El.addClass("card-title");
+        cardEl.append(h5El);
+
+        var questionEl = $("<p>");
+        questionEl.addClass("card-text");
+        questionEl.text(questionsObj[index].question);
+        cardEl.append(questionEl);
+
+        var answerButtons = "";
+        for (var i = 0; i < questionsObj.length; i++) {
+            answerButtons = $("<button class='btn btn-light mx-4 my-2 py-3 answer' name='answer'></button>");
+            answerButtons.attr("value", [i]);
+            answerButtons.text(questionsObj[index].choices[i]);
+            cardEl.append(answerButtons);
+        }
+
+        var nextQuestionButton = $("<button>Next</button>");
+        nextQuestionButton.addClass("next btn btn-light mx-4 my-2");
+        cardEl.append(nextQuestionButton);
+        $(".answer").on("click", userChoice);
+        index++;
+        questionCount++
+        return divEl;
+    };
+
+    $(".next").on("click", function(e) {
+        e.preventDefault();
+        if (userSelections[questionCount] == isNaN) {
+            alert("Please make a selection");
+        } else {
+            questionCount++
+            showNextQuestion();
+        }
+    })
+
+    function userChoice(e) {
+        var index = 0;
+        console.log(questionsObj[index].correctAnswer)
+        e.preventDefault();
+        if ($(".answer").val() == questionsObj[index].correctAnswer) {
+            $(".card-title").text("Correct!")
+            score++;
+        } else {
+            $(".card-title").text("Wrong answer. The correct answer was " + questionsObj[index].correctAnswer);
+        }
+        index++;
+    }
+
+
+    function showNextQuestion() {
+        $("#question").remove();
+
+        if (questionCount < questionsObj.length) {
+            var nextQuestion = createQandAElement(questionCount);
+            quiz.append(nextQuestion);
+
+        }
+    }
+    // Click handler for the 'next' button
+    // $('.next').on('click', function (e) {
+    //     e.preventDefault();
+    //     choose();
+      
+    //     // If no user selection, progress is stopped
+    //     if (userSelections[questionCount] == isNaN) {
+    //         alert('Please make a selection!');
+    //     } else {
+    //         questionCounter++;
+    //         displayNext();
+    //     }
+    // });  
+
 });
