@@ -24,13 +24,21 @@ $().ready(function() {
     var quizButton = $(".start-quiz");
     var introduction = $(".introduction");
     var highscoresButton = $(".highscores");
-    var quiz = $("#quiz");
-
+    var body = $("body");
     // // Event listener for highscores button
     highscoresButton.on("click", seeHighscores);
     // On seehighscores click, redirect to the highscores page.
     function seeHighscores() {
         location.href = "highscores.html";
+
+        var divEl = $("<div>", {id: 'highscore-page'});
+        divEl.addClass("container-md mx-4 my-4 question-container")
+        $("body").append(divEl);
+        divEl.text("Your highscores page:")
+
+        var cardEl = $("<div>").addClass("card py-4");
+        divEl.append(cardEl);
+        cardEl.text("Your score was " + highscore)
     }
 
     // On start quiz button click, do the following function
@@ -100,7 +108,7 @@ $().ready(function() {
     function nextQuestion(e) {
         e.preventDefault();
         $("#question").hide()
-        if (questionCount === 4) {
+        if (questionCount === 3) {
             showHighScores();
         } else {
             questionCount++;
@@ -109,13 +117,13 @@ $().ready(function() {
     }
 
     function userChoice(e) {
-        e.preventDefault();
-        if ($(this).id == questionsObj[0].correctAnswer) {
+        if ($("button").id == questionsObj[questionCount].correctAnswer) {
             alert("Correct")
         } else {
             alert("Wrong")
         }
-        index++;
+        e.preventDefault();
+
     }
 
     function showHighScores() {
