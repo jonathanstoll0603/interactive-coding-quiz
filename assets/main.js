@@ -31,15 +31,9 @@ $().ready(function() {
     // On seehighscores click, redirect to the highscores page.
     function seeHighscores() {
         location.href = "highscores.html";
+        localStorage.setItem("todos", JSON.stringify(todos));
 
-        var divEl = $("<div>", {id: 'highscore-page'});
-        divEl.addClass("container-md mx-4 my-4 question-container")
-        $("body").append(divEl);
-        divEl.text("Your highscores page:")
-
-        var cardEl = $("<div>").addClass("card py-4");
-        divEl.append(cardEl);
-        cardEl.text("Your score was " + highscore)
+        $(".card-text").text("Your score: " + (score / 4) + ".")
     }
 
     // On start quiz button click, do the following function
@@ -115,23 +109,30 @@ $().ready(function() {
         } else {
             questionCount++;
             createQandAElement();
+            return;
         }
     }
 
     function userChoice(e) {
         e.preventDefault();
         userSelection = $(this).val();
-        console.log(userSelection);
-        console.log(questionsObj[questionCount].correctAnswer)
+        var body = $("body");
+        var response = $("<p class='response'></p>")
+        
+        body.append(response);
+
         if (userSelection == questionsObj[questionCount].correctAnswer) {
+            $(this).css("background-color", "green");
             alert("Correct! Click next to continue")
+            $(".response").text("Question " + [questionCount + 1] + ": Correct answer! Click next to continue");
             score++;
-            return
+            return;
         } else {
-            alert("Wrong answer. The correct answer was: " + questionsObj[questionCount].correctAnswer + ". Click next to continue.")
+            $(this).css("background-color", "red");
+            alert("Question " + [questionCount + 1] + ": Wrong answer. The correct answer was " + questionsObj[questionCount].correctAnswer + ". Click next to continue.")
+            $(".response").text("Question " + [questionCount + 1] + ": Wrong answer. The correct answer was " + questionsObj[questionCount].correctAnswer + ". Click next to continue.")
             return;
         }
-
     }
 
     function showHighScores() {
