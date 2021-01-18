@@ -1,6 +1,10 @@
 /* universal styles */
 body {
     background-color: lightblue;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+
 }
 
 /* navbar highscore styles */
@@ -11,10 +15,23 @@ body {
 
 /* body container styles */
 .body-container {
+    position: absolute;
     text-align: center;
-    align-content: center;
+    margin: 0 auto;
+    top:50px;
+
+}
+
+.introduction {
+    margin: 0 auto;
 }
 
 .card {
     background-color: rgb(231, 231, 231);
+    width: 900px;
+}
+
+/* Dynamically created element styles */
+.question-container {
+    width: 100%;
 }
