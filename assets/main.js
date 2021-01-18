@@ -31,8 +31,6 @@ $().ready(function() {
     // On seehighscores click, redirect to the highscores page.
     function seeHighscores() {
         location.href = "highscores.html";
-        localStorage.setItem("todos", JSON.stringify(todos));
-
         $(".card-text").text("Your score: " + (score / 4) + ".")
     }
 
