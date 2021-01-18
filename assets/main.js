@@ -20,6 +20,7 @@ $().ready(function() {
     var questionCount = 0; // counts which question user is on
     var score = 0;
     var highscore = 0;
+    var userSelection = "";
     var timerButton = $(".seconds-left")
     var quizButton = $(".start-quiz");
     var introduction = $(".introduction");
@@ -66,6 +67,7 @@ $().ready(function() {
         }, 1000);
     }
 
+    // Create questions and answers 
     function createQandAElement() {
         var divEl = $("<div>", {id: 'question'});
         divEl.addClass("container-md mx-4 my-4 question-container")
@@ -86,7 +88,7 @@ $().ready(function() {
         var answerButtons = "";
         for (var i = 0; i < questionsObj.length; i++) {
             answerButtons = $("<button class='btn btn-light mx-4 my-2 py-3 answer' name='answer'></button>");
-            answerButtons.attr("id", questionsObj[questionCount].correctAnswer);
+            answerButtons.attr("value", questionsObj[i].correctAnswer);
             answerButtons.text(questionsObj[questionCount].choices[i]);
             cardEl.append(answerButtons);
         }
@@ -117,12 +119,18 @@ $().ready(function() {
     }
 
     function userChoice(e) {
-        if ($("button").id == questionsObj[questionCount].correctAnswer) {
-            alert("Correct")
-        } else {
-            alert("Wrong")
-        }
         e.preventDefault();
+        userSelection = $(this).val();
+        console.log(userSelection);
+        console.log(questionsObj[questionCount].correctAnswer)
+        if (userSelection == questionsObj[questionCount].correctAnswer) {
+            alert("Correct! Click next to continue")
+            score++;
+            return
+        } else {
+            alert("Wrong answer. The correct answer was: " + questionsObj[questionCount].correctAnswer + ". Click next to continue.")
+            return;
+        }
 
     }
 
